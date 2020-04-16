@@ -1,0 +1,259 @@
+#Eksamensprojekt
+
+#install.packages("plot3D")
+#install.packages("matlib)
+library(plot3D) #Såfremt at plot3D pakken ikke er installeret skal ovenstående kommando køres ved at fjerne #.
+library(matlib) #Såfremt at matlib ikke er installeret skal linje 4 køres. Husk at skrive yes
+Program = TRUE
+
+readinteger <- function(k) { #Denne funktion skal sikre at brugerinput er et tal.
+  
+  n <- readline(prompt=k)  #Den nye variable n er lig med readline af k. 
+  
+  if(!grepl("^[-]{0,1}[0-9]{0,}.{0,1}[0-9]{1,}$",n)) {   #Her tjekker grepl om n består kun af tal, men kan også have decimaler og negative tal og mellemrum
+    
+    m <- "Det forventede input var et tal. Prøv igen : \n" #Svarer man forkert må man prøve igen.
+    return(readinteger(m)) #Her kører den readinteger af m. 
+    
+  }
+  
+  return(as.integer(n)) #Svarer man rigtigt returnerer den n som et tal. 
+  
+}
+
+createvec1 <- function() { #Denne funktion skal oprette en vektor.
+  
+  vektor1 = c() #Initialiserer en tom vektor. 
+  
+  x_1prompt <- 'Angiv førstekoordinat: ' #Initialiserer prompt / k 
+  x_1 <- readinteger(x_1prompt) #Her bliver førstekoordinat fået ved hjælp af readinteger
+  y_1prompt <- 'Angiv andet koordinat: ' #Initialiserer prompt / k 
+  y_1 <- readinteger(y_1prompt) #Her bliver andetkoordinaten fået ved hjælp af readinteger
+  
+  vektor1 = c(x_1, y_1) #De to input indsættes i vektoren. 
+  return(as.vector(vektor1)) #Funktionen returnerer vektor1.
+  
+}
+
+createvec2 <- function() { #Denne funktion skal oprette en vektor, såfremt der er brug for 2.
+  
+  vektor2 = c() #Initialiserer en tom vektor. 
+  
+  x_2prompt <- 'Angiv førstekoordinat til vektor 2:  ' #Intitialiserer prompt / k
+  x_2 <- readinteger(x_2prompt) #Førstekoordinatet fået ved hjælp af readinteger.
+  y_2prompt <- 'Angiv andetkoordinatet til vektor 2: ' #Initialiserer prompt / k
+  y_2 <- readinteger(y_2prompt) #Andetkoordinatet fås ved hjælp af readinteger.
+  
+  vektor2 = c(x_2, y_2) #De to input indsættes i vektoren. 
+  return(as.vector(vektor2)) #Vektoren kommer ud af funktionen.
+  
+}
+
+createplotadd <- function (){
+  
+  x1 <- c(vec1[1], vec1[1] + vec2[1], vec1[1] + vec2[1]) #Slutpunkt af vektor1 defineres
+  y1 <- c(vec1[2], vec1[2] + vec2[2], vec1[2] + vec2[2])
+  xname <- c(x1[1] - 2, x1[2] - 2, x1[3] - 2) # bruges til placering af vektornavnene
+  yname <- c(y1[1] - 2, y1[2] + 2, y1[3] - 2) # så er de ikke ovenpå vektoren ved at subtrahere med 3
+  x0 <- c(0, x1[1], 0) #Startpunktet af vektorerne defineres
+  y0 <- c(0, y1[1], 0)
+  
+  xvalues <- c(max(x1), max(x0), min(x1), min(x0)) # samler max og min xværdier
+  yvalues <- c(max(y1), max(y0), min(y1), min(y0)) # samler max og min yværdier
+  xakse = c(min(xvalues) - 3, max(xvalues) + 3) # vektor af mindste x værdi og største x værdi
+  yakse = c(min(yvalues) - 3, max(yvalues) + 3) # vektor af mindste y værdi og største y værdi
+  
+  cols <- c("black", "red", "blue") #Farve på vektorerne
+  
+  arrows2D(x0, y0,  x1, y1, col = cols, lwd = 1, bty ="n", xlim = xakse, ylim = yakse) # Selve plottet oprettes. 
+  
+  abline(h =0, v = 0, lty = 2) #Tilføjer stiplede linjer op ad x- og y-aksen
+  
+  points2D(x0, y0, add = TRUE, col="black", colkey = FALSE, pch = 19, cex = 1) #Prik hvor pilen starter
+  points2D(x1, y1, add = TRUE, col="black", colkey = FALSE, pch = 19, cex = 1) #Prik hvor pilen slutter
+  text2D(xname , yname, c("Vektor 1", "Vektor 2", "Vektor 1 + vektor 2"), 
+         col = cols, add=TRUE, colkey = FALSE, font = 3, cex = 1)
+  
+}
+
+createplotsub <- function (){
+  
+  x1 <- c(subvec1[1], subvec2[1], subvec1[1]) #Slutpunkt af vektor1 defineres
+  y1 <- c(subvec1[2], subvec2[2], subvec1[2])
+  xname <- c(x1[1] - 2, x1[2] - 2, x1[3] - 2) # bruges til placering af vektornavnene
+  yname <- c(y1[1] - 2, y1[2] + 2, y1[3] - 2) # så er de ikke ovenpå vektoren ved at subtrahere med 3
+  x0 <- c(0, 0, x1[2]) #Startpunktet af vektorerne defineres
+  y0 <- c(0, 0, y1[2])
+  
+  xvalues <- c(max(x1), max(x0), min(x1), min(x0)) # samler max og min xværdier
+  yvalues <- c(max(y1), max(y0), min(y1), min(y0)) # samler max og min yværdier
+  xakse = c(min(xvalues) - 3, max(xvalues) + 3) # vektor af mindste x værdi og største x værdi
+  yakse = c(min(yvalues) - 3, max(yvalues) + 3) # vektor af mindste y værdi og største y værdi
+  
+  cols <- c("black", "red", "blue") #Farve på vektorerne
+  
+  arrows2D(x0, y0,  x1, y1, col = cols, lwd = 1, bty ="n", xlim = xakse, ylim = yakse) # Selve plottet oprettes. 
+  
+  abline(h =0, v = 0, lty = 2) #Tilføjer stiplede linjer op ad x- og y-aksen
+  
+  points2D(x0, y0, add = TRUE, col="black", colkey = FALSE, pch = 19, cex = 1) #Prik hvor pilen starter
+  points2D(x1, y1, add = TRUE, col="black", colkey = FALSE, pch = 19, cex = 1) #Prik hvor pilen slutter
+  text2D(xname , yname, c("Vektor 1", "Vektor 2", "Vektor 1 - vektor 2"), 
+         col = cols, add=TRUE, colkey = FALSE, font = 3, cex = 1)
+  
+}
+
+programvalg <- function(){
+  
+  programtxt <- 'Vil du fortsætte med at bruge R? Tast 1 for ja og tast 2 for nej: \n'
+  jaellernej <- readinteger(programtxt)
+  
+  if (jaellernej == 1){
+    
+    Program = TRUE
+    return(Program)
+    
+  } else if (jaellernej == 2) {
+    
+    Program = FALSE
+    q() #quitter. Efter kan man taste c hvis man vil blive ved med at bruge R, 
+    #y for at gemme workspace og quitte og n for ikke at gemme workspace
+  }
+}
+
+while (isTRUE(Program)) { #Mens Program er TRUE kører programmet. 
+  
+#Her begynder "main". 
+Intro <- "Velkommen. Kunne du tænke dig at arbejde med 
+geometri i planen [1] eller vektorer i planen [2]?\n"
+cat(Intro) #Intro bliver printet. 
+Intro_Valg <- "Indtast dit ønske som tal: \n"
+valg_1 <- readinteger(Intro_Valg) #Her bliver funktionen readinteger kørt med Intro_Valg som k.
+
+if (valg_1 == 1){ #Geometri i planen
+  
+  Intro_1 <- 'Du har valgt geometri i planen.\n'
+  cat(Intro_1) #Print introduktion til geometri
+  
+  Geo1 <- "Vil du regne arealet af en trekant?, [1], \n"
+  Geo2 <- "Vil du regne arealet af en firkant?, [2], \n"
+  Geo3 <- "Vil du regne arealet af en cirkel?, [3], \n"
+  cat(Geo1)
+  cat(Geo2)
+  cat(Geo3)
+  
+  Geo_Valg <- 'Indtast dit ønske som tal: \n'
+  valg_2 <- readinteger(Geo_Valg) #Her bliver readinteger kørt med Geo_Valg som k. 
+  
+  if (valg_2 == 1){ #Areal af Trekant.
+  
+  trekantintro <- 'Du har valgt at finde arealet af en trekant. \n'
+  cat(trekantintro)
+  
+  trekanthøjdetxt <- 'Indtast venligst højden på din trekant: \n'
+  trekanthøjde <- readinteger(trekanthøjdetxt)
+  trekantgrundlinjetxt <- 'Indtast venligst grundlinjen af din trekant: \n'
+  trekantgrundlinje <- readinteger(trekantgrundlinjetxt)
+  trekantareal <- trekantgrundlinje * trekanthøjde * 0.5
+  trekantarealtxt <- paste("Arealet på din trekant er: ", trekantareal, sep = " ")
+  cat(trekantarealtxt)
+  programvalg()
+  
+  } else if (valg_2 == 2) { #Areal af Rektangel
+    
+  firkanthøjdetxt <- "Indtast venligst højden på din firkant: \n"
+  firkanthøjde <- readinteger(firkanthøjdetxt)
+  firkantbreddetxt <- 'Indtast venligst bredden af din firkant: \n'
+  firkantbredde <- readinteger(firkantbreddetxt)
+  firkantareal <- firkantbredde * firkanthøjde
+  firkantarealtxt <- paste("Arealet på din firkant er: ", firkantareal, sep = " ")
+  cat(firkantarealtxt)
+  programvalg()
+  
+  } else if (valg_2 == 3) { #Areal af Cirkel
+    
+    cirkelradiustxt <- "Indtast venligst radius på din cirkel: \n"
+    cirkelradius <- readinteger(cirkelradiustxt)
+    cirkelareal <- 3.14 * (cirkelradius * cirkelradius)
+    cirkelarealtxt <- paste("Arealet på din cirkel er: ", cirkelareal, sep = " ")
+    cat(cirkelarealtxt)
+    programvalg()
+    
+} } else if (valg_1 == 2) { #Vektorer i planen. 
+  
+  Vektor_Intro <- 'Du har valgt at arbejde med vektorer i planen.\n'
+  cat(Vektor_Intro) #Print introduktionen til vektorer. 
+  
+  Vek1 <- 'Vil du addere to vektorer[1], \n'
+  Vek2 <- 'vil du subtrahere to vektorer, [2], \n'
+  Vek3 <- 'vil du finde længden af en vektor, [3], \n'
+  Vek4 <- 'eller vil du finde vinklen mellem to vektorer? [4] \n'
+  cat(Vek1)
+  cat(Vek2)
+  cat(Vek3)
+  cat(Vek4)
+  
+  Vek_Valg <- 'Indtast dit ønske som tal: \n'
+  valg_2 <- readinteger(Vek_Valg) #Her bliver readinteger kørt med Vek_Valg som k. 
+  
+  if (valg_2 == 1){ #Addition af to vektorer.
+    
+    Add <- 'Du har valgt at addere to vektorer. \n'
+    cat(Add)
+    vec1 <- createvec1() #Den første vektor bliver lavet vha. createvec1 funktion
+    cat(vec1)
+    cat(' \n' ) # Dette er til for at skabe en overskuelig command-line interface. 
+    vec2 <- createvec2() #Den anden vektor bliver lavet vha. createvec2 funktiomn. 
+    cat(vec2)
+    cat(' \n' ) # Dette er til for at skabe en overskuelig command-line interface. 
+    vec3 <- as.vector(vec1 + vec2)
+    Add1 <- paste("De to vektorer adderet bliver: ")
+    cat(Add1)
+    cat(vec3)
+    createplotadd()
+    programvalg()
+    
+        
+  } else if (valg_2 == 2) { #Subtrahering af to vektorer
+   
+    Sub <- 'Du har valgt at subtrahere to vektorer. \n'
+    cat(Sub)
+    subvec1 <- createvec1() #Den første vektor bliver lavet vha. createvec1 funktion
+    cat(subvec1)
+    cat(' \n' ) # Dette er til for at skabe en overskuelig command-line interface. 
+    subvec2 <- createvec2() #Den anden vektor bliver lavet vha. createvec2 funktiomn. 
+    cat(subvec2)
+    cat(' \n' ) # Dette er til for at skabe en overskuelig command-line interface. 
+    subvec3 <- as.vector(subvec1 - subvec2)
+    Sub1 <- paste("De to vektorer adderet bliver: ")
+    cat(Sub1)
+    cat(subvec3)
+    createplotsub()
+    programvalg()
+   
+    
+  } else if (valg_2 == 3) { #Længden af en vektor
+    
+    Vek_Længde <- 'Du har valgt at finde længden af en vektor. \n'
+    cat(Vek_Længde)
+    vec1 <- createvec1() #vec1 bliver oprettet ved hjælp af createvec1 funktionen. 
+    cat(vec1)
+    cat(' \n' ) # Dette er til for at skabe en overskuelig command-line interface. 
+    Vektorlængde <- sqrt((vec1[1]^2) + (vec1[2]^2)) #Længden af en vektor udregnes. 
+    LængdeSvar=paste("Længden af din vektor er :", Vektorlængde , sep = " ") 
+    cat(LængdeSvar) # svar gives
+    programvalg()
+    
+  } else if (valg_2 == 4) { #Vinkel mellem to vektorer
+    vinkeltxt <- 'Du har valgt at finde vinklen mellem to vektorer. \n'
+    cat(vinkeltxt)
+    vec1 <- createvec1()
+    vec2 <- createvec2()
+    mat <- angle(vec1,vec2)
+    vinkel1txt <- 'Her er vinklen i grader: \n'
+    cat(vinkel1txt)
+    cat(mat)
+    programvalg()
+  }
+}
+}
